@@ -46,9 +46,9 @@ class Multiplexer:
     def __init__(self):
 	self.CurrentInput = 0
 	self.Pin0 = LED(20)
-	#self.Pin1 = LED(6)
-	#self.Pin2 = LED(13)
-	#self.Pin3 = LED(19)
+	self.Pin1 = LED(6)
+	self.Pin2 = LED(13)
+	self.Pin3 = LED(19)
 	self.EnablePin = LED(26)
 	
     def SetEnableON(self):
