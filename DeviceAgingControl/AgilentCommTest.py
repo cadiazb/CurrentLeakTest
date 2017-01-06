@@ -18,10 +18,17 @@ led= LED(20)
 led.off()
 t = time.time()
 tmpValStr = instr.ask("MEAS:VOLT:DC? 10,0.003")
-print(time.time()-t)
-tmpVal = float(tmpValStr[1:5]) * 10**(float(tmpValStr[-3:]))
-if (tmpValStr[0]=="-"):
-    tmpVal = tmpVal * -1
+print('Time elapsed 1 = ' + str(time.time()-t))
+if (abs(float(tmpValStr)) < 1.0):
+    tmpValStr = instr.ask("MEAS:VOLT:DC? 1,0.003")
+    print('Time elapsed 2 = ' + str(time.time()-t))
+    
+    if (abs(float(tmpValStr)) < 0.1):
+	tmpValStr = instr.ask("MEAS:VOLT:DC? 0.1,0.003")
+	print('Time elapsed 3 = ' + str(time.time()-t))
+
+print('Time elapsed total = ' + str(time.time()-t))
+tmpVal = float(tmpValStr)
 print(tmpValStr)
 print(tmpVal)
 sleep(2)
@@ -30,7 +37,7 @@ sleep(2)
 led.off()
 t = time.time()
 print(instr.ask("MEAS:VOLT:DC? DEF,MIN"))
-print(time.time()-t)
+print('Time elapsed total = ' + str(time.time()-t))
 sleep(2)
 
 

@@ -27,15 +27,12 @@ class Multimeter:
 	
     def getVoltage(self):
 	#tmpValueStr = self.instr.ask("MEAS:VOLT:DC? DEF,MIN") #Takes too long which crashes code
-	tmpValueStr = self.instr.ask("MEAS:VOLT:DC? 0.1,0.003")
-	if (int(tmpValueStr[-3:]) > 30):
+	tmpValueStr = self.instr.ask("MEAS:VOLT:DC? 10,0.003")
+	if (abs(float(tmpValueStr)) < 1):
 	    tmpValueStr = self.instr.ask("MEAS:VOLT:DC? 1,0.003")
 	    
-	    if (int(tmpValueStr[-3:]) > 30):
-		tmpValueStr = self.instr.ask("MEAS:VOLT:DC? 10,0.003")
-		
-		if (int(tmpValueStr[-3:]) > 30):
-		    tmpValueStr = self.instr.ask("MEAS:VOLT:DC? 100,0.003")
+	    if (abs(float(tmpValueStr)) < 0.1):
+		tmpValueStr = self.instr.ask("MEAS:VOLT:DC? 0.1,0.003")
 		    
 	tmpValue = float(tmpValueStr)
 	  
