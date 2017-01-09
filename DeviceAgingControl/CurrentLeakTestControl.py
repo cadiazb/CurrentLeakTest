@@ -315,7 +315,7 @@ class AgingSystemControl:
 	if (self.dLogger.StartLogging):
 	    for iPanel in range(0,9):
 		if (self.SamplePanels[iPanel] != 0):
-		    tmpFileName = self.dLogger.SaveFolder + '/' + self.SamplePanels[iPanel].SampleName
+		    tmpFileName = self.dLogger.SaveFolder + '/' + self.SamplePanels[iPanel].SampleName + '.txt'
 		    tmpLogFile = open(tmpFileName, 'a+')
 		    tmpLogFile.write(time.strftime("%Y%m%d_%H%M%S") + '\t' + str(self.thermocouple.CurrentTemperature[0:4]) + '\t' + str(self.SamplePanels[iPanel].MeasuredVoltage) + '\t' + str(self.SamplePanels[iPanel].Resistor) + '\t' + str(self.SamplePanels[iPanel].MuxInput) + '\n')
 		    tmpLogFile.close()
