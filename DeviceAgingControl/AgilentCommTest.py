@@ -45,7 +45,7 @@ instr.write("INIT")
 instr.write("*WAI")
 print("Average is = " + instr.ask("CALC:AVER:AVER?"))
 #print(instr.ask("READ?"))
-print('Time elapsed total = ' + str(time.time()-t))
+print('Time elapsed total after averaging = ' + str(time.time()-t))
 
 print('Testing auto range and res')
 t = time.time()
