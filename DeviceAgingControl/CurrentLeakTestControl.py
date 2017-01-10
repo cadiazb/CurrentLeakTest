@@ -25,17 +25,30 @@ class Multimeter:
     def __init__(self):
 	self.instr = usbtmc.Instrument(10893, 4865) #Hardwired to connect to Agilent 34461A
 	
-    def getVoltage(self):
-	#tmpValueStr = self.instr.ask("MEAS:VOLT:DC? DEF,MIN") #Takes too long which crashes code
-	tmpValueStr = self.instr.ask("MEAS:VOLT:DC? 10,0.003")
+    def getSignalRange(self):
+	tmpRange = "10"
+	tmpValueStr = self.instr.ask("MEAS:VOLT:DC? " + tmpRange + ",0.003")
 	if (abs(float(tmpValueStr)) < 1):
-	    tmpValueStr = self.instr.ask("MEAS:VOLT:DC? 1,0.003")
+	    tmpRange = "1"
+	    tmpValueStr = self.instr.ask("MEAS:VOLT:DC? " + tmpRange + ",0.003")
 	    
 	    if (abs(float(tmpValueStr)) < 0.1):
-		tmpValueStr = self.instr.ask("MEAS:VOLT:DC? 0.1,0.003")
-		    
-	tmpValue = float(tmpValueStr)
-	  
+		tmpRange = "0.1"
+	
+	return tmpRange
+      
+    def getVoltage(self):
+	#tmpValueStr = self.instr.ask("MEAS:VOLT:DC? DEF,MIN") #Takes too long which crashes code
+	tmpRange = self.getSignalRange()
+
+	self.instr.write("CALC:AVER:CLE")
+	self.instr.write("CONF:VOLT:DC? " + tmpRange + ",0.001")
+	self.instr.write("SAMP:COUN 100")
+	self.instr.write("CALC:AVER:STAT ON")
+	self.instr.write("INIT")
+	self.instr.write("*WAI")
+	tmpValue = float(self.instr.ask("CALC:AVER:AVER?"))
+	
 	return tmpValue
 	
 class Multiplexer:
