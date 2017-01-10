@@ -27,27 +27,39 @@ class Multimeter:
 	
     def getSignalRange(self):
 	tmpRange = "10"
-	tmpValueStr = self.instr.ask("MEAS:VOLT:DC? " + tmpRange + ",0.001")
+	tmpValueStr = self.getSample(tmpRange)
 	if (abs(float(tmpValueStr)) < 1):
 	    tmpRange = "1"
-	    tmpValueStr = self.instr.ask("MEAS:VOLT:DC? " + tmpRange + ",0.001")
+	    tmpValueStr = self.getSample(tmpRange)
 	    
 	    if (abs(float(tmpValueStr)) < 0.1):
 		tmpRange = "0.1"
+		tmpValueStr = self.getSample(tmpRange)
 	
 	return tmpRange
       
-    def getVoltage(self):
-	#tmpValueStr = self.instr.ask("MEAS:VOLT:DC? DEF,MIN") #Takes too long which crashes code
-	tmpRange = self.getSignalRange()
-
+    def getSample(self, signalRange):
 	self.instr.write("CALC:AVER:CLE")
-	self.instr.write("CONF:VOLT:DC " + tmpRange + ",0.001")
+	self.instr.write("CONF:VOLT:DC " + signalRange + ",0.001")
 	self.instr.write("SAMP:COUN 100")
 	self.instr.write("CALC:AVER:STAT ON")
 	self.instr.write("INIT")
 	self.instr.write("*WAI")
 	tmpValue = float(self.instr.ask("CALC:AVER:AVER?"))
+	
+	return tmpValue
+      
+    def getVoltage(self):
+	#tmpValueStr = self.instr.ask("MEAS:VOLT:DC? DEF,MIN") #Takes too long which crashes code
+	tmpRange = "10"
+	tmpValue = self.getSample(tmpRange)
+	if (abs(tmpValue) < 1):
+	    tmpRange = "1"
+	    tmpValue = self.getSample(tmpRange)
+	    
+	    if (abs(tmpValue) < 0.1):
+		tmpRange = "0.1"
+		tmpValue = self.getSample(tmpRange)
 	
 	return tmpValue
 	
@@ -160,6 +172,7 @@ class widgetIDs(object):
 	self.messageLine = gtkWindow.glade.get_object("messageLine")
 	self.PBSTemperatureLabel = gtkWindow.glade.get_object("PBSTemperatureLabel")
 	self.MasterPower_button = gtkWindow.glade.get_object("MasterPower_button")
+	self.MeasurementInProgress = gtkWindow.glade.get_object("MeasurementInProgress")
 	
 	#Sample panels
 	self.ONswitch_1 = gtkWindow.glade.get_object("ONswitch_" + str(1))
@@ -186,6 +199,7 @@ class AgingSystemControl:
         self.wg.ControlPanel = self.glade.get_object("ControlPanel")
         self.wg.ControlPanel.show_all()
 	self.wg.ControlPanel.connect("delete-event", Gtk.main_quit)
+	self.wg.MeasurementInProgress.props.visible = True
 	#print(dir(self.glade.get_object("ThermostatManualPower_button").props))
 	
 	
@@ -306,7 +320,10 @@ class AgingSystemControl:
 	return True    
     
     #Function to periodically update window
+    
     def WindowUpdate(self):
+	self.wg.MeasurementInProgress.props.visible = True
+	
 	try:
 	    #Bath status
 	    self.thermocouple.GetTemperature()
@@ -321,8 +338,10 @@ class AgingSystemControl:
 	    #Data logging
 	    self.wg.dataLogPower_button.set_active(self.dLogger.StartLogging)
 	    self.wg.dataLogFileNameEntry.props.visible = not self.dLogger.AutoFileName
+	    self.wg.MeasurementInProgress.props.visible = False
 	    return True
 	except ValueError:
+	    self.wg.MeasurementInProgress.props.visible = False
 	    return True
     
     #Function to log data
