@@ -42,17 +42,17 @@ class Multiplexer:
   
     def __init__(self):
 	self.CurrentInput = 0
-	self.Pin0 = LED(20)
-	self.Pin1 = LED(6)
-	self.Pin2 = LED(13)
-	self.Pin3 = LED(19)
-	self.EnablePin = LED(26)
+	self.Pin0 = LED(6)
+	self.Pin1 = LED(13)
+	self.Pin2 = LED(19)
+	self.Pin3 = LED(26)
+	self.EnablePin = LED(5)
 	
-    def SetEnableON(self):
-	self.EnablePin.on()
-	
-    def SetEnableOFF(self):
+    def EnableMux(self):
 	self.EnablePin.off()
+	
+    def DisableMux(self):
+	self.EnablePin.on()
 	
     def SetInput(self, newInput):
 	self.CurrentInput = newInput
@@ -278,9 +278,11 @@ class AgingSystemControl:
 	    if (self.SamplePanels[iPanel] != 0):
 		try:
 		  #Should add shile loop to make sure mux is set properly
+		    self.mux.EnableMux()
 		    self.mux.SetInput(self.SamplePanels[iPanel].MuxInput)
 		    sleep(0.1)
 		    self.SamplePanels[iPanel].MeasuredVoltage = float(self.multimeter.getVoltage())
+		    self.mux.DisableMux()
 		    tmpActiveResistor = next(radio for radio in self.SamplePanels[iPanel].R1kOhm.get_group() if radio.get_active())
 		    tmpActiveResistorValue = tmpActiveResistor.props.label
 		    self.SamplePanels[iPanel].Resistor = float(tmpActiveResistorValue[0:3])

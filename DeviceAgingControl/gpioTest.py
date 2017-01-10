@@ -1,8 +1,8 @@
 from gpiozero import LED, Button
 from time import sleep
 
-led= LED(20)
-led.off()
+led1= LED(20)
+led1.off()
 sleep(5)
-led.on()
+led1.on()
 sleep(1)
