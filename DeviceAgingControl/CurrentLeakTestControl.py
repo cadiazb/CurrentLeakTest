@@ -27,10 +27,10 @@ class Multimeter:
 	
     def getSignalRange(self):
 	tmpRange = "10"
-	tmpValueStr = self.instr.ask("MEAS:VOLT:DC? " + tmpRange + ",0.003")
+	tmpValueStr = self.instr.ask("MEAS:VOLT:DC? " + tmpRange + ",0.001")
 	if (abs(float(tmpValueStr)) < 1):
 	    tmpRange = "1"
-	    tmpValueStr = self.instr.ask("MEAS:VOLT:DC? " + tmpRange + ",0.003")
+	    tmpValueStr = self.instr.ask("MEAS:VOLT:DC? " + tmpRange + ",0.001")
 	    
 	    if (abs(float(tmpValueStr)) < 0.1):
 		tmpRange = "0.1"
@@ -42,7 +42,7 @@ class Multimeter:
 	tmpRange = self.getSignalRange()
 
 	self.instr.write("CALC:AVER:CLE")
-	self.instr.write("CONF:VOLT:DC? " + tmpRange + ",0.001")
+	self.instr.write("CONF:VOLT:DC " + tmpRange + ",0.001")
 	self.instr.write("SAMP:COUN 100")
 	self.instr.write("CALC:AVER:STAT ON")
 	self.instr.write("INIT")
