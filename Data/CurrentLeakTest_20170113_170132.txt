@@ -95,3 +95,7 @@
 20170113_171718 	Last measurement performed on 20170113 171718
 20170113_171728 	Last measurement performed on 20170113 171728
 20170113_171738 	Last measurement performed on 20170113 171738
+20170113_171748 	Last measurement performed on 20170113 171748
+20170113_171758 	Last measurement performed on 20170113 171758
+20170113_171808 	Last measurement performed on 20170113 171808
+20170113_171818 	Last measurement performed on 20170113 171818
