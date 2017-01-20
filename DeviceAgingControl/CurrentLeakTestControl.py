@@ -57,7 +57,7 @@ class Multimeter:
 	    tmpRange = "1"
 	    tmpValue = self.getSample(tmpRange)
 	    
-	    if (abs(tmpValue) < 0.1):
+	    if (abs(tmpValue) < 0.085):
 		tmpRange = "0.1"
 		tmpValue = self.getSample(tmpRange)
 	
