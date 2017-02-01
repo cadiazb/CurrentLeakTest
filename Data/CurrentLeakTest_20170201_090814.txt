@@ -296,3 +296,10 @@
 20170201_095730 	Last measurement performed on 20170201 095730
 20170201_095740 	Last measurement performed on 20170201 095740
 20170201_095750 	Last measurement performed on 20170201 095750
+20170201_095800 	Last measurement performed on 20170201 095800
+20170201_095810 	Last measurement performed on 20170201 095810
+20170201_095820 	Last measurement performed on 20170201 095820
+20170201_095830 	Last measurement performed on 20170201 095830
+20170201_095840 	Last measurement performed on 20170201 095840
+20170201_095850 	Last measurement performed on 20170201 095850
+20170201_095900 	Last measurement performed on 20170201 095900
