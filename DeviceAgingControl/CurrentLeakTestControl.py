@@ -221,9 +221,11 @@ class AgingSystemControl:
 	#print(dir(self.wg.dataLogChooseFolder.props))
 	self.dLogger.AutoFileName = self.wg.dataLogAutoName_checkbutton.get_active()
 	self.wg.dataLogChooseFolder.set_filename(self.dLogger.SaveFolder)
+	
 	#Create timer to log every minute
 	#GObject.timeout_add_seconds(15, self.LogData)
 	GObject.timeout_add_seconds(10, self.MeasureVoltagesPeriodic)
+	GObject.timeout_add_seconds(10, self.UpdateTemperature)
 	
 	#connections
 	self.wg.dataLogAutoName_checkbutton.connect("toggled", self.AutoFileNameCheckButton_callback)
@@ -319,6 +321,16 @@ class AgingSystemControl:
 		    return False
 	return True    
     
+    
+    def UpdateTemperature(self):
+	self.wg.PBSTemperatureLabel.props.visible = False
+	try:
+	    self.thermocouple.GetTemperature()
+	    self.wg.PBSTemperatureLabel.props.visible = True
+	    return True
+	except ValueError:
+	    return True
+	  
     #Function to periodically update window
     
     def WindowUpdate(self):
@@ -326,7 +338,6 @@ class AgingSystemControl:
 	
 	try:
 	    #Bath status
-	    self.thermocouple.GetTemperature()
 	    self.wg.PBSTemperatureLabel.props.label = self.thermocouple.CurrentTemperature[0:4] + ' C'
 	
 	    #Update Sample Panel values
